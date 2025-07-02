@@ -1,17 +1,11 @@
-package edu.vt.mobiledev.attendancetracker
+package edu.vt.mobiledev.attendancetracker.attendance
 
-import android.text.format.DateFormat
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.RecyclerView
-import edu.vt.mobiledev.attendanceTracker.databinding.ListItemAttendanceBinding
 import edu.vt.mobiledev.attendanceTracker.databinding.ListItemStudentAttendanceBinding
-import edu.vt.mobiledev.attendanceTracker.databinding.ListItemStudentBinding
-import java.io.File
-import java.util.UUID
+import edu.vt.mobiledev.attendancetracker.Student
+import edu.vt.mobiledev.attendancetracker.setBackgroundWithContrastingText
 
 // Dream holder class with binding
 class StudentAttendanceHolder(

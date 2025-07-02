@@ -1,4 +1,4 @@
-package edu.vt.mobiledev.attendancetracker
+package edu.vt.mobiledev.attendancetracker.attendance
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,15 +18,16 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.vt.mobiledev.attendanceTracker.R
-import edu.vt.mobiledev.attendanceTracker.databinding.FragmentStudentListBinding
+import edu.vt.mobiledev.attendanceTracker.databinding.FragmentAttendanceListBinding
+import edu.vt.mobiledev.attendancetracker.Attendance
 import kotlinx.coroutines.launch
 
-class StudentListFragment: Fragment() {
+class AttendanceListFragment: Fragment() {
     // binding with null
-    private var _binding: FragmentStudentListBinding? = null
+    private var _binding: FragmentAttendanceListBinding? = null
 
     // View Model
-    private val studentListViewModel: StudentListViewModel by viewModels()
+    private val attendanceListViewModel: AttendanceListViewModel by viewModels()
 
     // binding
     private val binding
@@ -44,19 +45,19 @@ class StudentListFragment: Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                studentListViewModel.students.collect { students ->
-                    if (students.isEmpty()) {
-                        binding.noStudentText.visibility = View.VISIBLE
-                        binding.noStudentAddButton.visibility = View.VISIBLE
+                attendanceListViewModel.attendance.collect { attendance ->
+                    if (attendance.isEmpty()) {
+                        binding.noAttendanceText.visibility = View.VISIBLE
+                        binding.noAttendanceAddButton.visibility = View.VISIBLE
                     }
                     else {
-                        binding.noStudentAddButton.visibility = View.GONE
-                        binding.noStudentText.visibility = View.GONE
+                        binding.noAttendanceText.visibility = View.GONE
+                        binding.noAttendanceAddButton.visibility = View.GONE
                     }
-                    binding.studentRecyclerView.adapter =
-                        StudentListAdapter(students) { studentId ->
+                    binding.attendanceRecyclerView.adapter =
+                        AttendanceListAdapter(attendance) { attendanceId ->
                             findNavController().navigate(
-                                StudentListFragmentDirections.showStudentDetail(studentId)
+                                AttendanceListFragmentDirections.showAttendanceDetail(attendanceId)
                             )
                         }
                 }
@@ -71,25 +72,25 @@ class StudentListFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // for binding
-        _binding = FragmentStudentListBinding.inflate(inflater, container, false);
+        _binding = FragmentAttendanceListBinding.inflate(inflater, container, false);
 
         // for recycler implementation
-        binding.studentRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.attendanceRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        binding.noStudentAddButton.setOnClickListener {
-            showNewStudent()
+        binding.noAttendanceAddButton.setOnClickListener {
+            showNewAttendance()
         }
 
         requireActivity().addMenuProvider(object : MenuProvider {
             // blank for now
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.fragment_student_list, menu)
+                menuInflater.inflate(R.menu.fragment_attendance_list, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
-                    R.id.new_student -> {
-                        showNewStudent()
+                    R.id.new_attendance -> {
+                        showNewAttendance()
                         true
                     }
                     else -> false
@@ -97,17 +98,17 @@ class StudentListFragment: Fragment() {
             }
         }, viewLifecycleOwner)
 
-        getItemTouchHelper().attachToRecyclerView(binding.studentRecyclerView)
+        getItemTouchHelper().attachToRecyclerView(binding.attendanceRecyclerView)
 
         return binding.root
     }
 
-    private fun showNewStudent() {
+    private fun showNewAttendance() {
         viewLifecycleOwner.lifecycleScope.launch {
-            val newStudent = Student()
-            studentListViewModel.addStudent(newStudent)
+            val newAttendance = Attendance()
+            attendanceListViewModel.addAttendance(newAttendance)
             findNavController().navigate(
-                StudentListFragmentDirections.showStudentDetail(newStudent.id)
+                AttendanceListFragmentDirections.showAttendanceDetail(newAttendance.id)
             )
         }
     }
@@ -123,7 +124,7 @@ class StudentListFragment: Fragment() {
             ): Boolean = true
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                studentListViewModel.deleteStudent(viewHolder as StudentHolder)
+                attendanceListViewModel.deleteAttendance(viewHolder as AttendanceHolder)
             }
         })
     }

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/dreamListFragment"
-        android:name="edu.vt.mobiledev.attendancetracker.StudentListFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.student.StudentListFragment"
         android:label="DreamListFragment"
         tools:layout="@layout/fragment_student_list" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/studentDetailFragment"
-        android:name="edu.vt.mobiledev.attendancetracker.StudentDetailFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.student.StudentDetailFragment"
         android:label="StudentDetailFragment" >
         <argument
             android:name="studentId"
@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/attendanceListFragment"
-        android:name="edu.vt.mobiledev.attendancetracker.AttendanceListFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.attendance.AttendanceListFragment"
         android:label="AttendanceListFragment" >
         <action
             android:id="@+id/showAttendanceDetail"
@@ -65,7 +65,7 @@
     </fragment>
     <fragment
         android:id="@+id/attendanceDetailFragment"
-        android:name="edu.vt.mobiledev.attendancetracker.AttendanceDetailFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.attendance.AttendanceDetailFragment"
         android:label="AttendanceDetailFragment" >
         <argument
             android:name="attendanceId"
@@ -79,7 +79,7 @@
     </fragment>
     <fragment
         android:id="@+id/addStudentFragment"
-        android:name="edu.vt.mobiledev.attendancetracker.AddStudentFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.attendance.AddStudentFragment"
         android:label="AddStudentFragment" >
         <argument
             android:name="attendanceId"

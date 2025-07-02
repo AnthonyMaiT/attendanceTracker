@@ -1,12 +1,13 @@
-package edu.vt.mobiledev.attendancetracker
+package edu.vt.mobiledev.attendancetracker.student
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.RecyclerView
 import edu.vt.mobiledev.attendanceTracker.databinding.ListItemStudentBinding
+import edu.vt.mobiledev.attendancetracker.Student
+import edu.vt.mobiledev.attendancetracker.getScaledBitmap
 import java.io.File
 import java.util.UUID
 
@@ -17,7 +18,7 @@ class StudentHolder(
     lateinit var boundStudent: Student
         private set
 
-    fun bind(student: Student , onStudentClicked: (studentId: UUID) -> Unit){
+    fun bind(student: Student, onStudentClicked: (studentId: UUID) -> Unit){
         boundStudent = student
 
         // set title

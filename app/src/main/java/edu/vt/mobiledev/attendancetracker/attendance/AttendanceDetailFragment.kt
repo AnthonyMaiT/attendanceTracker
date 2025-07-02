@@ -1,9 +1,6 @@
-package edu.vt.mobiledev.attendancetracker
+package edu.vt.mobiledev.attendancetracker.attendance
 
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import kotlin.getValue
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
 import androidx.core.view.MenuProvider
-import androidx.core.view.doOnLayout
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -32,10 +24,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.vt.mobiledev.attendanceTracker.R
 import edu.vt.mobiledev.attendanceTracker.databinding.FragmentAttendanceDetailBinding
-import edu.vt.mobiledev.attendanceTracker.databinding.FragmentStudentDetailBinding
-import kotlinx.coroutines.flow.forEach
+import edu.vt.mobiledev.attendancetracker.Attendance
+import edu.vt.mobiledev.attendancetracker.DatePickerFragment
 import kotlinx.coroutines.launch
-import java.io.File
 import java.util.Date
 
 class AttendanceDetailFragment: Fragment() {

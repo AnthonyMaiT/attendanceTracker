@@ -1,8 +1,10 @@
-package edu.vt.mobiledev.attendancetracker
+package edu.vt.mobiledev.attendancetracker.attendance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import edu.vt.mobiledev.attendancetracker.Attendance
+import edu.vt.mobiledev.attendancetracker.Student
 import edu.vt.mobiledev.dreamcatcher.database.AttendanceRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
