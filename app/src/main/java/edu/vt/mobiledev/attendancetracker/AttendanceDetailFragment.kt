@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView
 import edu.vt.mobiledev.attendanceTracker.R
 import edu.vt.mobiledev.attendanceTracker.databinding.FragmentAttendanceDetailBinding
 import edu.vt.mobiledev.attendanceTracker.databinding.FragmentStudentDetailBinding
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Date
@@ -156,12 +157,16 @@ class AttendanceDetailFragment: Fragment() {
 
         attendanceReport = listOf(attendanceDate)
 
-//        if (dream.entries.any{it.kind == DreamEntryKind.REFLECTION}) {
-//            dreamReport += listOf(getString(R.string.share_reflection_title))
-//            dream.entries.filter{it.kind == DreamEntryKind.REFLECTION}.forEach {
-//                dreamReport += listOf(" " + getString(R.string.share_reflection_bullet, it.text))
-//            }
-//        }
+        val sl = attendanceDetailViewModel.studentsForAttendance
+        viewLifecycleOwner.lifecycleScope.launch {
+            sl.collect { studentList ->
+                studentList.forEach {
+                    val name = it.firstName + " " + it.lastName
+                    attendanceReport += listOf(name)
+                }
+            }
+        }
+
 
         return attendanceReport.joinToString("\n")
     }

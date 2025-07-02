@@ -26,6 +26,9 @@ interface AttendanceDao {
     @Query("DELETE FROM attendanceRecord WHERE studentId = (:studentId)  ")
     suspend fun internalDeleteStudentFromAttendance(studentId: UUID)
 
+    @Query("DELETE FROM attendanceRecord WHERE attendanceId = (:attendanceId)  ")
+    suspend fun internalDeleteAttendanceRecordByAttendance(attendanceId: UUID)
+
     @Transaction
     suspend fun deleteStudentFromAttendance(student: Student) {
         internalDeleteStudentFromAttendance(student.id)
@@ -93,6 +96,7 @@ interface AttendanceDao {
 
     @Transaction
     suspend fun deleteAttendance(attendance: Attendance) {
+        internalDeleteAttendanceRecordByAttendance(attendanceId = attendance.id)
         internalDeleteAttendance(attendance)
     }
 
@@ -135,6 +139,7 @@ interface AttendanceDao {
 
     @Transaction
     suspend fun deleteStudent(student: Student) {
+        internalDeleteStudentFromAttendance(student.id)
         internalDeleteStudent(student)
     }
 }
