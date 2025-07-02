@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeScreenFragment">
+
+    <fragment
+        android:id="@+id/dreamListFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.StudentListFragment"
+        android:label="DreamListFragment"
+        tools:layout="@layout/fragment_student_list" >
+        <action
+            android:id="@+id/showStudentDetail"
+            app:destination="@id/studentDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentDetailFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.StudentDetailFragment"
+        android:label="StudentDetailFragment" >
+        <argument
+            android:name="studentId"
+            app:argType="java.util.UUID" />
+        <action
+            android:id="@+id/show_photo_detail"
+            app:destination="@id/photoDialogFragment" />
+        <action
+            android:id="@+id/select_date"
+            app:destination="@id/datePickerFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/photoDialogFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.PhotoDialogFragment"
+        android:label="PhotoDialogFragment" >
+    <argument
+        android:name="dream_photo_file_name"
+        app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/datePickerFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.DatePickerFragment"
+        android:label="DatePickerFragment" >
+        <argument
+            android:name="studentBirthDate"
+            app:argType="java.util.Date" />
+    </dialog>
+    <fragment
+        android:id="@+id/homeScreenFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.HomeScreenFragment"
+        android:label="HomeScreenFragment" >
+        <action
+            android:id="@+id/viewStudents"
+            app:destination="@id/dreamListFragment" />
+        <action
+            android:id="@+id/viewAttendance"
+            app:destination="@id/attendanceListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendanceListFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.AttendanceListFragment"
+        android:label="AttendanceListFragment" >
+        <action
+            android:id="@+id/showAttendanceDetail"
+            app:destination="@id/attendanceDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendanceDetailFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.AttendanceDetailFragment"
+        android:label="AttendanceDetailFragment" >
+        <argument
+            android:name="attendanceId"
+            app:argType="java.util.UUID" />
+        <action
+            android:id="@+id/selectDate"
+            app:destination="@id/datePickerFragment" />
+        <action
+            android:id="@+id/addStudents"
+            app:destination="@id/addStudentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addStudentFragment"
+        android:name="edu.vt.mobiledev.attendancetracker.AddStudentFragment"
+        android:label="AddStudentFragment" >
+        <argument
+            android:name="attendanceId"
+            app:argType="java.util.UUID" />
+    </fragment>
+</navigation>

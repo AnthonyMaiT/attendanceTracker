@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">AttendanceTracker</string>
+    <string name="app_title">Attendance Tracker</string>
+    <string name="app_choose">Choose an resource to edit</string>
+    <string name="student_title">Student</string>
+    <string name="first_name_title">First Name</string>
+    <string name="last_name_title">Last Name</string>
+    <string name="first_name_place">First Name</string>
+    <string name="last_name_place">Last Name</string>
+    <string name="school_id_place">Student Id</string>
+    <string name="school_id_title">Student Id</string>
+    <string name="student_photo">Student Photo</string>
+    <string name="take_photo_menu">Take Photo</string>
+    <string name="new_student">Add Student</string>
+    <string name="no_student">No Students</string>
+    <string name="new_attendance">Add Attendance Day</string>
+    <string name="no_attendance">No Attendance Days</string>
+    <string name="view_student">View Students</string>
+    <string name="view_attendance">View Attendance</string>
+    <string name="attendance_title">Attendance</string>
+    <string name="date_title">Date</string>
+    <string name="share_attendance">Share Attendance</string>
+    <string name="send_report">Send dream report via</string>
+    <string name="report_subject">Subject</string>
+    <string name="add_students">Add Students</string>
+    <string name="add_student">Add Student</string>
+    <string name="add_student_title">Add Student For Attendance</string>
+    <string name="add_student_hint">Enter Student ID</string>
+
+    <string name="added_student">Student added</string>
+    <string name="multiple_add_student">There are multiple students with the same ID</string>
+    <string name="duplicate_add_student">The student has already been added</string>
+    <string name="does_not_exist_student">Student does not exist</string>
+</resources>
