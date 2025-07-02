@@ -54,8 +54,9 @@ class AttendanceListFragment: Fragment() {
                         binding.noAttendanceText.visibility = View.GONE
                         binding.noAttendanceAddButton.visibility = View.GONE
                     }
+                    val studentCount = attendanceListViewModel.getStudentInAttendanceCount()
                     binding.attendanceRecyclerView.adapter =
-                        AttendanceListAdapter(attendance) { attendanceId ->
+                        AttendanceListAdapter(attendance, studentCount) { attendanceId ->
                             findNavController().navigate(
                                 AttendanceListFragmentDirections.showAttendanceDetail(attendanceId)
                             )

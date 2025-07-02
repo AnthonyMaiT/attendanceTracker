@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class AttendanceListViewModel : ViewModel() {
 
@@ -21,6 +22,10 @@ class AttendanceListViewModel : ViewModel() {
 
     suspend fun addAttendance(attendance: Attendance) {
         attendanceRepository.addAttendance(attendance)
+    }
+
+    suspend fun getStudentInAttendanceCount(): List<Int> {
+        return attendanceRepository.getStudentsForAttendanceCount()
     }
 
      fun deleteAttendance(attendance: AttendanceHolder) {

@@ -73,6 +73,10 @@ class AttendanceRepository constructor(context: Context, private val coroutineSc
         return dreamMultiMap
     }
 
+    suspend fun getStudentsForAttendanceCount(): List<Int> {
+        return database.attendanceDao().getStudentsForAttendanceCount()
+    }
+
     // Call the DAO transaction function, to get the dream and its entries:
     suspend fun getStudent(id: UUID): Student {
         val dre = database.attendanceDao().getStudent(id)

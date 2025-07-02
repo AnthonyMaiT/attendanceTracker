@@ -23,6 +23,15 @@ interface AttendanceDao {
     """)
     fun getStudentsForAttendance(attendanceId: UUID): Flow<List<Student>>
 
+    @Query("""
+        SELECT COUNT(ar.studentId)
+        FROM attendance a
+        LEFT JOIN attendanceRecord ar ON a.id = ar.attendanceId
+        GROUP BY a.id
+        ORDER BY a.date DESC
+    """)
+    suspend fun getStudentsForAttendanceCount(): List<Int>
+
     @Query("DELETE FROM attendanceRecord WHERE studentId = (:studentId)  ")
     suspend fun internalDeleteStudentFromAttendance(studentId: UUID)
 

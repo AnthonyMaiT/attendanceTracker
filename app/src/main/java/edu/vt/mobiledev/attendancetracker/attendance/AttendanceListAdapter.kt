@@ -15,12 +15,15 @@ class AttendanceHolder(
     lateinit var boundAttendance: Attendance
         private set
 
-    fun bind(attendance: Attendance, onAttendanceClick: (attendanceId: UUID) -> Unit){
+    fun bind(attendance: Attendance, studentCount: Int, onAttendanceClick: (attendanceId: UUID) -> Unit){
         boundAttendance = attendance
 
         val formatString = "MM-dd-yyyy"
         val date = DateFormat.format(formatString, attendance.date).toString()
         binding.listItemDate.text = date
+
+        val studentCountText = "Students Present: " + studentCount.toString()
+        binding.listItemStudentPresent.text = studentCountText
 
         binding.root.setOnClickListener {
             onAttendanceClick(attendance.id)
@@ -32,6 +35,7 @@ class AttendanceHolder(
 // List adapter
 class AttendanceListAdapter(
     private val attendance: List<Attendance>,
+    private val studentCounts: List<Int>,
     private val onAttendanceClick: (attendanceId: UUID) -> Unit
 ) : RecyclerView.Adapter<AttendanceHolder>() {
 
@@ -49,7 +53,8 @@ class AttendanceListAdapter(
     override fun onBindViewHolder(holder: AttendanceHolder, position: Int) {
         // binds dream to the holder
         val attendanceDay = attendance[position]
-        holder.bind(attendanceDay, onAttendanceClick)
+        val studentCount = studentCounts[position]
+        holder.bind(attendanceDay, studentCount, onAttendanceClick)
     }
 
     override fun getItemCount() = attendance.size
