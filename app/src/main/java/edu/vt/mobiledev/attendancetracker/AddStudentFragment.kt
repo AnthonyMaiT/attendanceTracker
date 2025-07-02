@@ -3,6 +3,7 @@ package edu.vt.mobiledev.attendancetracker
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -105,6 +106,13 @@ class AddStudentFragment: Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val mediaPlayer = MediaPlayer.create(requireContext(), R.raw.airhorn)
+        mediaPlayer.start()
+        mediaPlayer.setOnCompletionListener { it.release() }
     }
 
 
