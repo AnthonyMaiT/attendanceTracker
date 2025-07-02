@@ -52,8 +52,8 @@ class AttendanceRepository constructor(context: Context, private val coroutineSc
         database.attendanceDao().insertAttendanceRecord(attendanceRecord)
     }
 
-    suspend fun getAttendanceRecord(attendanceRecord: AttendanceRecord) {
-        database.attendanceDao().getAttendanceRecord(attendanceRecord.studentId, attendanceRecord.attendanceId)
+    suspend fun getAttendanceRecord(attendanceRecord: AttendanceRecord): AttendanceRecord {
+        return database.attendanceDao().getAttendanceRecord(attendanceRecord.studentId, attendanceRecord.attendanceId)
     }
 
     fun deleteAttendance(attendance: Attendance) {

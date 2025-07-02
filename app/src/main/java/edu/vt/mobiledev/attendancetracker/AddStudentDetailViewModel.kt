@@ -30,7 +30,7 @@ class AddStudentDetailViewModel(private val attendanceId: UUID) : ViewModel() {
         }
         val ar = AttendanceRecord(attendanceId = attendanceId, studentId = s[0].id)
         val getAr = attendanceRepository.getAttendanceRecord(ar)
-        if (getAr == null) {
+        if (getAr != null) {
             return StudentAddStatus.DUP
         }
         addStudentToAttendance(ar)

@@ -80,6 +80,7 @@ class AddStudentFragment: Fragment() {
                         R.string.added_student,
                         Snackbar.LENGTH_SHORT
                     ).show()
+                    binding.studentId.setText("")
                 } else if (response == AddStudentDetailViewModel.StudentAddStatus.DNE) {
                     Snackbar.make(
                         view,
