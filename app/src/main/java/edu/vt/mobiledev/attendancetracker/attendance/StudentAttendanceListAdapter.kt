@@ -7,7 +7,7 @@ import edu.vt.mobiledev.attendanceTracker.databinding.ListItemStudentAttendanceB
 import edu.vt.mobiledev.attendancetracker.Student
 import edu.vt.mobiledev.attendancetracker.setBackgroundWithContrastingText
 
-// Dream holder class with binding
+// student attendance holder class with binding
 class StudentAttendanceHolder(
     val binding: ListItemStudentAttendanceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -17,6 +17,7 @@ class StudentAttendanceHolder(
     fun bind(student: Student) {
         boundStudent = student
 
+        // binds student name and set color to grey
         val studentName = student.firstName + " " + student.lastName
         binding.listItemStudent.text = studentName
         binding.listItemStudent.setBackgroundWithContrastingText("grey")
@@ -27,7 +28,7 @@ class StudentAttendanceHolder(
 
 // List adapter
 class StudentAttendanceAdapter(
-    private val entries: List<Student>,
+    private val students: List<Student>,
 ) : RecyclerView.Adapter<StudentAttendanceHolder>() {
 
     // for view holder
@@ -42,10 +43,10 @@ class StudentAttendanceAdapter(
 
     // binding view holder
     override fun onBindViewHolder(holder: StudentAttendanceHolder, position: Int) {
-        // binds entry to the holder
-        val entry = entries[position]
-        holder.bind(entry)
+        // binds students to the holder
+        val student = students[position]
+        holder.bind(student)
     }
 
-    override fun getItemCount() = entries.size
+    override fun getItemCount() = students.size
 }

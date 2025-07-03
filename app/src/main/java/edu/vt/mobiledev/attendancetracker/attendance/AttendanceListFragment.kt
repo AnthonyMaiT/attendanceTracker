@@ -46,6 +46,7 @@ class AttendanceListFragment: Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 attendanceListViewModel.attendance.collect { attendance ->
+                    // when no attendance display add attendance button in center
                     if (attendance.isEmpty()) {
                         binding.noAttendanceText.visibility = View.VISIBLE
                         binding.noAttendanceAddButton.visibility = View.VISIBLE
@@ -54,7 +55,9 @@ class AttendanceListFragment: Fragment() {
                         binding.noAttendanceText.visibility = View.GONE
                         binding.noAttendanceAddButton.visibility = View.GONE
                     }
+                    // get student count from attendance
                     val studentCount = attendanceListViewModel.getStudentInAttendanceCount()
+                    // bind adapter
                     binding.attendanceRecyclerView.adapter =
                         AttendanceListAdapter(attendance, studentCount) { attendanceId ->
                             findNavController().navigate(
@@ -78,16 +81,16 @@ class AttendanceListFragment: Fragment() {
         // for recycler implementation
         binding.attendanceRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        // for adding new attendance
         binding.noAttendanceAddButton.setOnClickListener {
             showNewAttendance()
         }
 
         requireActivity().addMenuProvider(object : MenuProvider {
-            // blank for now
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.fragment_attendance_list, menu)
             }
-
+            // for adding new attendance
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.new_attendance -> {
@@ -99,11 +102,13 @@ class AttendanceListFragment: Fragment() {
             }
         }, viewLifecycleOwner)
 
+        // for swipes
         getItemTouchHelper().attachToRecyclerView(binding.attendanceRecyclerView)
 
         return binding.root
     }
 
+    // goes to next fragment to add attendance
     private fun showNewAttendance() {
         viewLifecycleOwner.lifecycleScope.launch {
             val newAttendance = Attendance()
@@ -123,7 +128,7 @@ class AttendanceListFragment: Fragment() {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean = true
-
+            // delete when attendance is swiped
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 attendanceListViewModel.deleteAttendance(viewHolder as AttendanceHolder)
             }

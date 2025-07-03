@@ -11,7 +11,7 @@ import edu.vt.mobiledev.attendancetracker.getScaledBitmap
 import java.io.File
 import java.util.UUID
 
-// Dream holder class with binding
+// student holder class with binding
 class StudentHolder(
     val binding: ListItemStudentBinding
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -21,20 +21,20 @@ class StudentHolder(
     fun bind(student: Student, onStudentClicked: (studentId: UUID) -> Unit){
         boundStudent = student
 
-        // set title
+        // set name
         val studentName = student.firstName + " " + student.lastName
         binding.listItemName.text = studentName
-        // set reflection count
+        // set student Id
         val studId = "Student ID: " + student.schoolId
         binding.listItemSchoolId.text = studId
-
+        // set photo
         updatePhoto(student)
 
         binding.root.setOnClickListener {
             onStudentClicked(student.id)
         }
     }
-
+    // used to set photo on item
     private fun updatePhoto(student: Student) {
         with(binding.listItemImage) {
             if (tag != student.photoFileName) {
@@ -79,7 +79,7 @@ class StudentListAdapter(
 
     // binding view holder
     override fun onBindViewHolder(holder: StudentHolder, position: Int) {
-        // binds dream to the holder
+        // binds students to the holder
         val student = students[position]
         holder.bind(student, onStudentClicked)
     }

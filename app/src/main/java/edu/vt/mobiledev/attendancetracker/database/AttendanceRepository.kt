@@ -1,4 +1,4 @@
-package edu.vt.mobiledev.dreamcatcher.database
+package edu.vt.mobiledev.attendancetracker.database
 
 import android.content.Context
 import androidx.room.Room
@@ -9,92 +9,100 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 private const val DATABASE_NAME = "attendance-database"
 
 class AttendanceRepository constructor(context: Context, private val coroutineScope: CoroutineScope = GlobalScope) {
 
-    // Transform the DAO multimap into a list of dreams with their entries:
+
+    // adds attendance record
+    suspend fun addAttendanceRecord(attendanceRecord: AttendanceRecord) {
+        database.attendanceDao().insertAttendanceRecord(attendanceRecord)
+    }
+
+    // gets a attendance record
+    suspend fun getAttendanceRecord(attendanceRecord: AttendanceRecord): AttendanceRecord {
+        return database.attendanceDao().getAttendanceRecord(attendanceRecord.studentId, attendanceRecord.attendanceId)
+    }
+
+    // deletes attendance record
+    fun deleteAttendanceRecord(attendanceId: UUID, studentId: UUID) {
+        coroutineScope.launch {
+            database.attendanceDao().deleteAttendanceRecord(attendanceId, studentId)
+        }
+    }
+
+    // returns attendance days
     fun getAttendanceDays(): Flow<List<Attendance>> {
-        val dreamMultiMap = database.attendanceDao().getAttendanceDays()
-        return dreamMultiMap
+        return database.attendanceDao().getAttendanceDays()
     }
 
+    // gets students for attendance day
     fun getStudentsForAttendance(attendanceId: UUID): Flow<List<Student>> {
-        val dreamMultiMap = database.attendanceDao().getStudentsForAttendance(attendanceId)
-        return dreamMultiMap
+        return database.attendanceDao().getStudentsForAttendance(attendanceId)
     }
 
-    // Call the DAO transaction function, to get the dream and its entries:
+
+    // gets attendance
     suspend fun getAttendance(id: UUID): Attendance {
-        val dre = database.attendanceDao().getAttendance(id)
-        return dre
+        return database.attendanceDao().getAttendance(id)
     }
 
-    suspend fun getStudentBySchoolId(id: String): List<Student> {
-        val dre = database.attendanceDao().getStudentBySchoolId(id)
-        return dre
-    }
-
+    // updates attendance
     fun updateAttendance(attendance: Attendance) {
         coroutineScope.launch {
             database.attendanceDao().updateAttendance(attendance)
         }
     }
 
+    // adds attendance
     suspend fun addAttendance(attendance: Attendance) {
         database.attendanceDao().insertAttendance(attendance)
     }
 
-    suspend fun addAttendanceRecord(attendanceRecord: AttendanceRecord) {
-        database.attendanceDao().insertAttendanceRecord(attendanceRecord)
-    }
-
-    suspend fun getAttendanceRecord(attendanceRecord: AttendanceRecord): AttendanceRecord {
-        return database.attendanceDao().getAttendanceRecord(attendanceRecord.studentId, attendanceRecord.attendanceId)
-    }
-
+    // delete attendance
     fun deleteAttendance(attendance: Attendance) {
         coroutineScope.launch {
             database.attendanceDao().deleteAttendance(attendance)
         }
     }
 
-    fun deleteStudentFromAttendance(student: Student) {
-        coroutineScope.launch {
-            database.attendanceDao().deleteStudentFromAttendance(student)
-        }
-    }
-
-    fun getStudents(): Flow<List<Student>> {
-        val dreamMultiMap = database.attendanceDao().getStudents()
-        return dreamMultiMap
-    }
-
+    // get counts of students for all attendance days
     suspend fun getStudentsForAttendanceCount(): List<Int> {
         return database.attendanceDao().getStudentsForAttendanceCount()
     }
 
-    // Call the DAO transaction function, to get the dream and its entries:
+    // get all students
+    fun getStudents(): Flow<List<Student>> {
+        return database.attendanceDao().getStudents()
+    }
+
+    // gets student by school id
+    suspend fun getStudentBySchoolId(id: String): List<Student> {
+        val dre = database.attendanceDao().getStudentBySchoolId(id)
+        return dre
+    }
+
+    // gets student
     suspend fun getStudent(id: UUID): Student {
         val dre = database.attendanceDao().getStudent(id)
         return dre
     }
 
-    // Listing 13.25:
-    // called to update dream in database
+    // updates student
     fun updateStudent(student: Student) {
         coroutineScope.launch {
             database.attendanceDao().updateStudent(student)
         }
     }
 
+    // adds student
     suspend fun addStudent(student: Student) {
         database.attendanceDao().insertStudent(student)
     }
 
+    // deletes student
     fun deleteStudent(student: Student) {
         coroutineScope.launch {
             database.attendanceDao().deleteStudent(student)

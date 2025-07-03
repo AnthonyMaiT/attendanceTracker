@@ -20,6 +20,7 @@ class AddStudentFragment: Fragment() {
     // binding with null
     private var _binding: FragmentAddStudentBinding? = null
 
+    // used to get attendance Id
     private val args: AddStudentFragmentArgs by navArgs()
 
     // View Model
@@ -47,10 +48,13 @@ class AddStudentFragment: Fragment() {
         // for binding
         _binding = FragmentAddStudentBinding.inflate(inflater, container, false);
 
+        // when user clicks add student
         binding.addStudent.setOnClickListener { view: View ->
             val studentId = binding.studentId.text.toString()
             viewLifecycleOwner.lifecycleScope.launch {
+                // get response
                 val response = addStudentDetailViewModel.getStudentAndAdd(studentId)
+                // response when success
                 if (response == AddStudentDetailViewModel.StudentAddStatus.SUCCESS) {
                     Snackbar.make(
                         view,
@@ -58,18 +62,21 @@ class AddStudentFragment: Fragment() {
                         Snackbar.LENGTH_SHORT
                     ).show()
                     binding.studentId.setText("")
+                // response when student doesn't exist
                 } else if (response == AddStudentDetailViewModel.StudentAddStatus.DNE) {
                     Snackbar.make(
                         view,
                         R.string.does_not_exist_student,
                         Snackbar.LENGTH_SHORT
                     ).show()
+                // response when multiple students with same ID exists
                 } else if (response == AddStudentDetailViewModel.StudentAddStatus.MULT) {
                     Snackbar.make(
                         view,
                         R.string.multiple_add_student,
                         Snackbar.LENGTH_SHORT
                     ).show()
+                // response when attendance record already exists
                 }  else if (response == AddStudentDetailViewModel.StudentAddStatus.DUP) {
                     Snackbar.make(
                         view,
@@ -86,6 +93,7 @@ class AddStudentFragment: Fragment() {
 
     override fun onStop() {
         super.onStop()
+        // plays airhorn when fragment is stopped
         val mediaPlayer = MediaPlayer.create(requireContext(), R.raw.airhorn)
         mediaPlayer.start()
         mediaPlayer.setOnCompletionListener { it.release() }

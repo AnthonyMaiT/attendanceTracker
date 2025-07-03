@@ -20,7 +20,7 @@
     <string name="attendance_title">Attendance</string>
     <string name="date_title">Date</string>
     <string name="share_attendance">Share Attendance</string>
-    <string name="send_report">Send dream report via</string>
+    <string name="send_report">Send attendance report via</string>
     <string name="report_subject">Subject</string>
     <string name="add_students">Add Students</string>
     <string name="add_student">Add Student</string>

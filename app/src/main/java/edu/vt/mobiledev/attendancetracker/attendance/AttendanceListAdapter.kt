@@ -8,7 +8,7 @@ import edu.vt.mobiledev.attendanceTracker.databinding.ListItemAttendanceBinding
 import edu.vt.mobiledev.attendancetracker.Attendance
 import java.util.UUID
 
-// Dream holder class with binding
+// Attendance holder class with binding
 class AttendanceHolder(
     val binding: ListItemAttendanceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -17,14 +17,15 @@ class AttendanceHolder(
 
     fun bind(attendance: Attendance, studentCount: Int, onAttendanceClick: (attendanceId: UUID) -> Unit){
         boundAttendance = attendance
-
+        // format date
         val formatString = "MM-dd-yyyy"
         val date = DateFormat.format(formatString, attendance.date).toString()
         binding.listItemDate.text = date
-
+        // present student count parser
         val studentCountText = "Students Present: " + studentCount.toString()
         binding.listItemStudentPresent.text = studentCountText
 
+        // click listener
         binding.root.setOnClickListener {
             onAttendanceClick(attendance.id)
         }
@@ -51,7 +52,7 @@ class AttendanceListAdapter(
 
     // binding view holder
     override fun onBindViewHolder(holder: AttendanceHolder, position: Int) {
-        // binds dream to the holder
+        // binds attendance and student count to the holder
         val attendanceDay = attendance[position]
         val studentCount = studentCounts[position]
         holder.bind(attendanceDay, studentCount, onAttendanceClick)

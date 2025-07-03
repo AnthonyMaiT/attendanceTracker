@@ -1,4 +1,4 @@
-package edu.vt.mobiledev.dreamcatcher.database
+package edu.vt.mobiledev.attendancetracker.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

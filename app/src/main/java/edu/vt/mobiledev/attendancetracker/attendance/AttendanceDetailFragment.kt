@@ -34,6 +34,7 @@ class AttendanceDetailFragment: Fragment() {
     // binding with null
     private var _binding: FragmentAttendanceDetailBinding? = null
 
+    // args for attendanceId
     private val args: AttendanceDetailFragmentArgs by navArgs()
 
     // View Model
@@ -52,20 +53,24 @@ class AttendanceDetailFragment: Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    // on view created
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // recycler for student list
                 attendanceDetailViewModel.studentsForAttendance.collect { studentsForAttendance ->
                     studentsForAttendance?.let { binding.attendanceListRecycler.adapter = StudentAttendanceAdapter(it) }
                 }
             }
         }
 
+        // for date picker result
         setFragmentResultListener(
             DatePickerFragment.REQUEST_KEY_DATE
         ) { requestKey, bundle ->
             val newDate =
                 bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
+            // update date
             attendanceDetailViewModel.updateAttendance { it.copy(date = newDate) }
         }
     }
@@ -79,16 +84,18 @@ class AttendanceDetailFragment: Fragment() {
         // for binding
         _binding = FragmentAttendanceDetailBinding.inflate(inflater, container, false);
 
+        // for recycler view
         binding.attendanceListRecycler.layoutManager = LinearLayoutManager(context);
 
+        // for menus
         requireActivity().addMenuProvider(object : MenuProvider {
-            // blank for now
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.fragment_attendance_detail, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
+                    // initiate share for attendance
                     R.id.share_attendance -> {
                         attendanceDetailViewModel.attendance.value?.let { shareAttendance(it) }
                         return true
@@ -108,6 +115,7 @@ class AttendanceDetailFragment: Fragment() {
             }
         }
 
+        // swipe feature for deleting student records
         getItemTouchHelper().attachToRecyclerView(binding.attendanceListRecycler)
 
         return binding.root
@@ -117,12 +125,14 @@ class AttendanceDetailFragment: Fragment() {
 
         binding.apply {
 
+            // add click listener for showing date dialog
             date.setOnClickListener {
                 findNavController().navigate(
                     AttendanceDetailFragmentDirections.selectDate(attendance.date)
                 )
             }
 
+            // click listener for adding students
             addStudents.setOnClickListener {
                 findNavController().navigate(
                     AttendanceDetailFragmentDirections.addStudents(attendance.id)
@@ -139,15 +149,17 @@ class AttendanceDetailFragment: Fragment() {
         }
     }
 
+    // used to get report of attendance
     private fun getAttendanceReport(attendance: Attendance): String {
 
         var attendanceReport: List<String>
-
+        // format date and add to list
         val formatString = "MM-dd-yyyy"
         val attendanceDate = DateFormat.format(formatString, attendance.date).toString()
 
         attendanceReport = listOf(attendanceDate)
 
+        // add each student to list
         val sl = attendanceDetailViewModel.studentsForAttendance
         viewLifecycleOwner.lifecycleScope.launch {
             sl.collect { studentList ->
@@ -158,10 +170,11 @@ class AttendanceDetailFragment: Fragment() {
             }
         }
 
-
+        // split list with new line characters
         return attendanceReport.joinToString("\n")
     }
 
+    // used to share attendance with intent
     private fun shareAttendance(attendance: Attendance) {
         val reportIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
@@ -172,6 +185,7 @@ class AttendanceDetailFragment: Fragment() {
             )
         }
 
+        // wrap report intent in chooser intent to choose apps
         val chooserIntent = Intent.createChooser(
             reportIntent,
             getString(R.string.send_report)
@@ -180,6 +194,7 @@ class AttendanceDetailFragment: Fragment() {
         startActivity(chooserIntent)
     }
 
+    // for swipe feature
     private fun getItemTouchHelper(): ItemTouchHelper {
 
         return ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -190,6 +205,7 @@ class AttendanceDetailFragment: Fragment() {
                 target: RecyclerView.ViewHolder
             ): Boolean = true
 
+            // delete when item is swiped
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 attendanceDetailViewModel.deleteStudentFromAttendance(viewHolder as StudentAttendanceHolder)
             }

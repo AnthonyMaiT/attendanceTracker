@@ -1,4 +1,4 @@
-package edu.vt.mobiledev.dreamcatcher.database
+package edu.vt.mobiledev.attendancetracker.database
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -15,6 +15,7 @@ import java.util.UUID
 // Data access object for dream model
 @Dao
 interface AttendanceDao {
+    // used to get students for a certain attendance day
     @Query("""
         SELECT s.*
         FROM student s
@@ -23,6 +24,7 @@ interface AttendanceDao {
     """)
     fun getStudentsForAttendance(attendanceId: UUID): Flow<List<Student>>
 
+    // used to get the counts of students for all attendance days
     @Query("""
         SELECT COUNT(ar.studentId)
         FROM attendance a
@@ -32,120 +34,132 @@ interface AttendanceDao {
     """)
     suspend fun getStudentsForAttendanceCount(): List<Int>
 
+    // deletes attendanceRecord based of studentId
     @Query("DELETE FROM attendanceRecord WHERE studentId = (:studentId)  ")
     suspend fun internalDeleteStudentFromAttendance(studentId: UUID)
 
+    // deletes attendanceRecord based on attendance Id
     @Query("DELETE FROM attendanceRecord WHERE attendanceId = (:attendanceId)  ")
     suspend fun internalDeleteAttendanceRecordByAttendance(attendanceId: UUID)
 
-    @Transaction
-    suspend fun deleteStudentFromAttendance(student: Student) {
-        internalDeleteStudentFromAttendance(student.id)
-    }
-
-    // used to get all dreams
-    @Query("SELECT * FROM attendance d ORDER BY d.date DESC")
-    fun getAttendanceDays(): Flow<List<Attendance>>
-
-    // get single dream from id
-    @Query("SELECT * FROM attendance WHERE id=(:id)")
-    suspend fun internalGetAttendanceDays(id: UUID): Attendance
-
-
-    // gets dream with entries
-    @Transaction
-    suspend fun getAttendance(id: UUID): Attendance {
-        return internalGetAttendanceDays(id)
-    }
-
-    // get single dream from id
-    @Query("SELECT * FROM student WHERE schoolId=(:id)")
-    suspend fun internalGetStudentBySchoolId(id: String): List<Student>
-
-
-    // gets dream with entries
-    @Transaction
-    suspend fun getStudentBySchoolId(id: String): List<Student> {
-        return internalGetStudentBySchoolId(id)
-    }
-
-    // updates dream
-    @Update
-    suspend fun internalUpdateAttendance(attendance: Attendance)
-
-    // update dream based on values
-    @Transaction
-    suspend fun updateAttendance(attendance: Attendance) {
-        internalUpdateAttendance(attendance)
-    }
-
+    // gets an attendance record based on all fields
     @Query("SELECT * FROM attendanceRecord WHERE studentId =(:studentId) AND attendanceId=(:attendanceId)")
     suspend fun getAttendanceRecord(studentId: UUID, attendanceId: UUID) :AttendanceRecord
 
+    @Query("DELETE FROM attendanceRecord WHERE attendanceId = (:attendanceId) AND studentId  = (:studentId)")
+    suspend fun deleteAttendanceRecord(attendanceId: UUID, studentId: UUID)
+
+    // inserting attendance record
     @Insert
     suspend fun internalInsertAttendanceRecord(attendanceRecord: AttendanceRecord)
 
+    // inserting attendance record
     @Transaction
     suspend fun insertAttendanceRecord(attendanceRecord: AttendanceRecord) {
         // You must implement this on your own
         internalInsertAttendanceRecord(attendanceRecord)
     }
 
+    // used to get all attendance days
+    @Query("SELECT * FROM attendance d ORDER BY d.date DESC")
+    fun getAttendanceDays(): Flow<List<Attendance>>
+
+    // get single attendance from id
+    @Query("SELECT * FROM attendance WHERE id=(:id)")
+    suspend fun internalGetAttendanceDays(id: UUID): Attendance
+
+
+    // gets single attendance day
+    @Transaction
+    suspend fun getAttendance(id: UUID): Attendance {
+        return internalGetAttendanceDays(id)
+    }
+
+    // updates attendance day
+    @Update
+    suspend fun internalUpdateAttendance(attendance: Attendance)
+
+    // update attendance based on values
+    @Transaction
+    suspend fun updateAttendance(attendance: Attendance) {
+        internalUpdateAttendance(attendance)
+    }
+
+
+    // inserting attendance
     @Insert
     suspend fun internalInsertAttendance(attendance: Attendance)
 
+    // inserts attendance
     @Transaction
     suspend fun insertAttendance(attendance: Attendance) {
         // You must implement this on your own
         internalInsertAttendance(attendance)
     }
 
+    // deletes attendance
     @Delete
     suspend fun internalDeleteAttendance(attendance: Attendance)
 
+    // deletes attendance and all records with attendance
     @Transaction
     suspend fun deleteAttendance(attendance: Attendance) {
         internalDeleteAttendanceRecordByAttendance(attendanceId = attendance.id)
         internalDeleteAttendance(attendance)
     }
 
-    // used to get all dreams
+    // get single student from id
+    @Query("SELECT * FROM student WHERE schoolId=(:id)")
+    suspend fun internalGetStudentBySchoolId(id: String): List<Student>
+
+
+    // get student from id
+    @Transaction
+    suspend fun getStudentBySchoolId(id: String): List<Student> {
+        return internalGetStudentBySchoolId(id)
+    }
+
+    // used to get all students
     @Query("SELECT * FROM student d ORDER BY d.lastName DESC")
     fun getStudents(): Flow<List<Student>>
 
-    // get single dream from id
+    // get single student from id
     @Query("SELECT * FROM student WHERE id=(:id)")
     suspend fun internalGetStudent(id: UUID): Student
 
 
-    // gets dream with entries
+    // gets student
     @Transaction
     suspend fun getStudent(id: UUID): Student {
         return internalGetStudent(id)
     }
 
-    // updates dream
+    // updates student
     @Update
     suspend fun internalUpdateStudent(student: Student)
 
-    // update dream based on values
+    // update student based on values
     @Transaction
     suspend fun updateStudent(student: Student) {
         internalUpdateStudent(student)
     }
 
+    // inserts student
     @Insert
     suspend fun internalInsertStudent(student: Student)
 
+    // inserts student
     @Transaction
     suspend fun insertStudent(student: Student) {
         // You must implement this on your own
         internalInsertStudent(student)
     }
 
+    // deletes student
     @Delete
     suspend fun internalDeleteStudent(student: Student)
 
+    // deletes student and all attendance records from it
     @Transaction
     suspend fun deleteStudent(student: Student) {
         internalDeleteStudentFromAttendance(student.id)

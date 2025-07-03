@@ -40,6 +40,7 @@ class StudentDetailFragment: Fragment() {
     // binding with null
     private var _binding: FragmentStudentDetailBinding? = null
 
+    // args for student id
     private val args: StudentDetailFragmentArgs by navArgs()
 
     // View Model
@@ -58,6 +59,7 @@ class StudentDetailFragment: Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    // taking a photo
     private val takePhoto = registerForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { didTakePhoto: Boolean ->
@@ -70,6 +72,7 @@ class StudentDetailFragment: Fragment() {
         }
     }
 
+    // for taking photos
     private fun canResolveIntent(intent: Intent): Boolean {
         val packageManager: PackageManager = requireActivity().packageManager
         val resolvedActivity: ResolveInfo? =
@@ -81,7 +84,7 @@ class StudentDetailFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        // getting result from date picker
         setFragmentResultListener(
             DatePickerFragment.REQUEST_KEY_DATE
         ) { requestKey, bundle ->
@@ -101,9 +104,9 @@ class StudentDetailFragment: Fragment() {
         _binding = FragmentStudentDetailBinding.inflate(inflater, container, false);
 
         requireActivity().addMenuProvider(object : MenuProvider {
-            // blank for now
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.fragment_student_detail, menu)
+                // intent for photos
                 val captureImageIntent = takePhoto.contract.createIntent(
                     requireContext(),
                     Uri.EMPTY // NOTE: The "null" used in BNRG is obsolete now
@@ -112,6 +115,7 @@ class StudentDetailFragment: Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // used to take photo
                 return when (menuItem.itemId) {
                     R.id.take_photo_menu -> {
                         studentDetailViewModel.student.value?.let {
@@ -134,17 +138,19 @@ class StudentDetailFragment: Fragment() {
             }
         }, viewLifecycleOwner)
 
-        // set title based on text box change
+        // update first name
         binding.firstNameText.doOnTextChanged { text, _, _, _ ->
             studentDetailViewModel.updateStudent { oldStudent ->
                 oldStudent.copy(firstName = text.toString())
             }
         }
+        //update last name
         binding.lastNameText.doOnTextChanged { text, _, _, _ ->
             studentDetailViewModel.updateStudent { oldStudent ->
                 oldStudent.copy(lastName = text.toString())
             }
         }
+        // update schoolId
         binding.schoolIdText.doOnTextChanged { text, _, _, _ ->
             studentDetailViewModel.updateStudent { oldStudent ->
                 oldStudent.copy(schoolId = text.toString())
@@ -167,19 +173,21 @@ class StudentDetailFragment: Fragment() {
 
         binding.apply {
 
+            // click listen for student photo dialog
             studentPhoto.setOnClickListener {
                 findNavController().navigate(
                     StudentDetailFragmentDirections.showPhotoDetail(student.photoFileName)
                 )
             }
 
+            // click listen for birth date dialog
             studentBirthDate.setOnClickListener {
                 findNavController().navigate(
                     StudentDetailFragmentDirections.selectDate(student.birthDate)
                 )
             }
 
-            // update title text
+            // update respective fields
             if (firstNameText.text.toString() != student.firstName) {
                 firstNameText.setText(student.firstName)
             }
@@ -200,6 +208,7 @@ class StudentDetailFragment: Fragment() {
         updatePhoto(student)
     }
 
+    // used to update photo on screen
     private fun updatePhoto(student: Student) {
         with(binding.studentPhoto) {
             if (tag != student.photoFileName) {

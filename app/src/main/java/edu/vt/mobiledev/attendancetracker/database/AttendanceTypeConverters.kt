@@ -1,4 +1,4 @@
-package edu.vt.mobiledev.dreamcatcher.database
+package edu.vt.mobiledev.attendancetracker.database
 
 import androidx.room.TypeConverter
 import java.util.Date

@@ -46,6 +46,7 @@ class StudentListFragment: Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 studentListViewModel.students.collect { students ->
+                    // used to show add button when no students present
                     if (students.isEmpty()) {
                         binding.noStudentText.visibility = View.VISIBLE
                         binding.noStudentAddButton.visibility = View.VISIBLE
@@ -54,6 +55,7 @@ class StudentListFragment: Fragment() {
                         binding.noStudentAddButton.visibility = View.GONE
                         binding.noStudentText.visibility = View.GONE
                     }
+                    // binds student recycler
                     binding.studentRecyclerView.adapter =
                         StudentListAdapter(students) { studentId ->
                             findNavController().navigate(
@@ -77,18 +79,19 @@ class StudentListFragment: Fragment() {
         // for recycler implementation
         binding.studentRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        // used to add new student
         binding.noStudentAddButton.setOnClickListener {
             showNewStudent()
         }
 
         requireActivity().addMenuProvider(object : MenuProvider {
-            // blank for now
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.fragment_student_list, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
+                    // used to add new student
                     R.id.new_student -> {
                         showNewStudent()
                         true
@@ -98,11 +101,13 @@ class StudentListFragment: Fragment() {
             }
         }, viewLifecycleOwner)
 
+        // swiping
         getItemTouchHelper().attachToRecyclerView(binding.studentRecyclerView)
 
         return binding.root
     }
 
+    // adds new student
     private fun showNewStudent() {
         viewLifecycleOwner.lifecycleScope.launch {
             val newStudent = Student()
@@ -123,6 +128,7 @@ class StudentListFragment: Fragment() {
                 target: RecyclerView.ViewHolder
             ): Boolean = true
 
+            // delete on swipe
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 studentListViewModel.deleteStudent(viewHolder as StudentHolder)
             }

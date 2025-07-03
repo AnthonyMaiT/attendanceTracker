@@ -16,6 +16,7 @@ class DatePickerFragment : DialogFragment() {
     private val args: DatePickerFragmentArgs by navArgs()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        // listener when clicked
         val dateListener = DatePickerDialog.OnDateSetListener {
                 _: DatePicker, year: Int, month: Int, day: Int ->
 
@@ -25,6 +26,7 @@ class DatePickerFragment : DialogFragment() {
                 bundleOf(BUNDLE_KEY_DATE to resultDate))
         }
 
+        // used to set date
         val calendar = Calendar.getInstance()
         calendar.time = args.studentBirthDate
         val initialYear = calendar.get(Calendar.YEAR)

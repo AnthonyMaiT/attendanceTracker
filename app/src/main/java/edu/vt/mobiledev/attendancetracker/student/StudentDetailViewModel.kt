@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import edu.vt.mobiledev.attendancetracker.Student
-import edu.vt.mobiledev.dreamcatcher.database.AttendanceRepository
+import edu.vt.mobiledev.attendancetracker.database.AttendanceRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,10 +13,10 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 class StudentDetailViewModel(studentId: UUID) : ViewModel() {
-    // dream repo object
+    // attendance repo object
     private val attendanceRepository = AttendanceRepository.get()
 
-    // set dream
+    // set student
     private val _student: MutableStateFlow<Student?> = MutableStateFlow(null)
     val student: StateFlow<Student?> = _student.asStateFlow()
     init {
@@ -25,14 +25,13 @@ class StudentDetailViewModel(studentId: UUID) : ViewModel() {
         }
     }
 
-    // updates dream into repo
+    // updates student into repo
     fun updateStudent(onUpdate: (Student) -> Student) {
         _student.update { oldStudent ->
             val newStudent = oldStudent?.let { onUpdate(it) } ?: return
             if (newStudent == oldStudent) {
                 return
             }
-            // update last updated text
             newStudent.copy()
         }
     }
@@ -45,7 +44,7 @@ class StudentDetailViewModel(studentId: UUID) : ViewModel() {
     }
 }
 
-// used for arguments for dreamID
+// used for arguments for studentId
 class StudentDetailViewModelFactory(
     private val studentId: UUID
 ) : ViewModelProvider.Factory {

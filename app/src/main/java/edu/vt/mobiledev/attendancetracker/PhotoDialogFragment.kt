@@ -21,10 +21,11 @@ class PhotoDialogFragment : DialogFragment() {
         val args: PhotoDialogFragmentArgs by navArgs()
         val photoFileName = args.dreamPhotoFileName
 
+        // sets photo
         updatePhoto(photoFileName)
 
 
-        // builds dialog box with functions
+        // builds dialog box with functions for photo
         return AlertDialog.Builder(requireContext())
             .setView(binding.root)
             .show()
